@@ -1,5 +1,6 @@
 "use client";
 
+import BenefitsSectionModal from "@/components/sections/BenefitsSectionModal";
 import CompanySectionModal from "@/components/sections/CompanySectionModal";
 import PositionSectionModal from "@/components/sections/PositionSectionModal";
 import WorkConditionSectionModal from "@/components/sections/WorkConditionSectionModal";
@@ -22,22 +23,26 @@ type Props = {
   editingJob?: Job | null;
 };
 
+type ModalState = {
+  company: boolean;
+  position: boolean;
+  benefits: boolean;
+  workCondition: boolean;
+};
+
 export default function JobModal({ open, onClose, onSave, editingJob }: Props) {
   const { job, updateField, handleDelete } = useJobForm(editingJob);
 
-  const [modals, setModals] = useState({
+  const [modals, setModals] = useState<ModalState>({
     company: false,
     position: false,
     benefits: false,
     workCondition: false,
-    location: false,
-    growth: false,
-    personalValue: false,
   });
 
-  const openModal = (key: keyof typeof modals) =>
+  const openModal = (key: keyof ModalState) =>
     setModals((prev) => ({ ...prev, [key]: true }));
-  const closeModal = (key: keyof typeof modals) =>
+  const closeModal = (key: keyof ModalState) =>
     setModals((prev) => ({ ...prev, [key]: false }));
 
   return (
@@ -65,6 +70,12 @@ export default function JobModal({ open, onClose, onSave, editingJob }: Props) {
             isSet={!!job.workCondition}
             onClick={() => openModal("workCondition")}
             onDelete={() => handleDelete("workCondition")}
+          />
+          <SectionButton
+            label="Benefits"
+            isSet={!!job.benefits}
+            onClick={() => openModal("benefits")}
+            onDelete={() => handleDelete("benefits")}
           />
         </div>
 
@@ -97,6 +108,12 @@ export default function JobModal({ open, onClose, onSave, editingJob }: Props) {
         onClose={() => closeModal("workCondition")}
         value={job.workCondition}
         onSave={(val) => updateField("workCondition", val)}
+      />
+      <BenefitsSectionModal
+        open={modals.benefits}
+        onClose={() => closeModal("benefits")}
+        value={job.benefits}
+        onSave={(val) => updateField("benefits", val)}
       />
     </Dialog>
   );

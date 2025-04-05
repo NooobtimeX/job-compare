@@ -3,22 +3,19 @@ export type Job = {
   company?: CompanyInfo;
   position?: PositionInfo;
   workCondition?: WorkCondition;
+  benefits?: Benefits;
 };
 
 export type CompanyInfo = {
   name: string;
   size?: string;
   city?: string;
-  relocationSupport?: boolean;
 };
 
 export type PositionInfo = {
   title: string;
   baseSalary: number;
   bonus?: number;
-  stockOptions?: boolean;
-  vacationDays?: number;
-  insurance?: string[];
 };
 
 export type WorkCondition = {
@@ -26,4 +23,11 @@ export type WorkCondition = {
   remoteOption?: boolean;
   overtime?: boolean;
   flexibleHours?: boolean;
+};
+
+export type Benefits = {
+  relocationSupport?: boolean;
+  insurance?: string[];
+  stockOptions?: boolean;
+  vacationDays?: number;
 };

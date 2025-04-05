@@ -21,7 +21,6 @@ export const generateRandomJob = (): Job => ({
         name: random(["Blitzwerk", "NextVision", "CodeMint", "PixelEdge"]),
         size: random(["Small", "Medium", "Large"]),
         city: random(["Bangkok", "Chiang Mai", "Remote"]),
-        relocationSupport: randBool(),
       }
     : undefined,
   position: randBool()
@@ -29,11 +28,6 @@ export const generateRandomJob = (): Job => ({
         title: random(["Frontend Dev", "Fullstack Dev", "Backend Dev"]),
         baseSalary: Math.floor(Math.random() * 50000) + 25000,
         bonus: randBool() ? Math.floor(Math.random() * 10000) : undefined,
-        stockOptions: randBool(),
-        vacationDays: randBool()
-          ? 10 + Math.floor(Math.random() * 11)
-          : undefined,
-        insurance: randBool() ? ["Basic", "Premium"] : undefined,
       }
     : undefined,
   workCondition: randBool()
@@ -42,6 +36,16 @@ export const generateRandomJob = (): Job => ({
         remoteOption: randBool(),
         overtime: randBool(),
         flexibleHours: randBool(),
+      }
+    : undefined,
+  benefits: randBool()
+    ? {
+        relocationSupport: randBool(),
+        stockOptions: randBool(),
+        vacationDays: randBool()
+          ? 10 + Math.floor(Math.random() * 11)
+          : undefined,
+        insurance: randBool() ? ["Basic", "Premium"] : undefined,
       }
     : undefined,
 });
