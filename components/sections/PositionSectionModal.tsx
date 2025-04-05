@@ -57,65 +57,43 @@ export default function PositionSectionModal({
         <DialogHeader>
           <DialogTitle>Position Info</DialogTitle>
         </DialogHeader>
-        <div className="space-y-2">
-          <Input
-            placeholder="Title"
-            value={form.title}
-            onChange={(e) => handleChange("title", e.target.value)}
-          />
-          <Input
-            type="number"
-            placeholder="Base Salary"
-            value={form.baseSalary}
-            onChange={(e) =>
-              handleChange("baseSalary", parseFloat(e.target.value) || 0)
-            }
-          />
-          <Input
-            type="number"
-            placeholder="Bonus (optional)"
-            value={form.bonus ?? ""}
-            onChange={(e) =>
-              handleChange(
-                "bonus",
-                e.target.value ? parseFloat(e.target.value) : undefined
-              )
-            }
-          />
-          <Input
-            placeholder="Insurance (comma separated)"
-            value={form.insurance?.join(", ") || ""}
-            onChange={(e) =>
-              handleChange(
-                "insurance",
-                e.target.value
-                  .split(",")
-                  .map((s) => s.trim())
-                  .filter(Boolean)
-              )
-            }
-          />
-          <div className="flex items-center space-x-2">
-            <label className="flex items-center space-x-1">
-              <input
-                type="checkbox"
-                checked={form.stockOptions ?? false}
-                onChange={(e) => handleChange("stockOptions", e.target.checked)}
-              />
-              <span>Stock Options</span>
-            </label>
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Title</label>
+            <Input
+              placeholder="Title"
+              value={form.title}
+              onChange={(e) => handleChange("title", e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Base Salary</label>
             <Input
               type="number"
-              placeholder="Vacation Days"
-              value={form.vacationDays ?? ""}
+              placeholder="Base Salary"
+              value={form.baseSalary}
+              onChange={(e) =>
+                handleChange("baseSalary", parseFloat(e.target.value) || 0)
+              }
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Bonus (optional)</label>
+            <Input
+              type="number"
+              placeholder="Bonus"
+              value={form.bonus ?? ""}
               onChange={(e) =>
                 handleChange(
-                  "vacationDays",
-                  e.target.value ? parseInt(e.target.value) : undefined
+                  "bonus",
+                  e.target.value ? parseFloat(e.target.value) : undefined
                 )
               }
             />
           </div>
+
           <Button onClick={handleSubmit} className="w-full mt-2">
             Save
           </Button>

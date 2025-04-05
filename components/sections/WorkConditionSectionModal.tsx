@@ -27,7 +27,7 @@ export default function WorkConditionSectionModal({
   const [form, setForm] = useState<WorkCondition>({});
 
   useEffect(() => {
-    const initial = value ? structuredClone(value) : {};
+    const initial: WorkCondition = value ? structuredClone(value) : {};
     setForm(initial);
   }, [value]);
 
@@ -49,36 +49,33 @@ export default function WorkConditionSectionModal({
         <DialogHeader>
           <DialogTitle>Work Condition</DialogTitle>
         </DialogHeader>
-        <div className="space-y-2">
-          <Input
-            placeholder="Work Hours"
-            value={form.workHours || ""}
-            onChange={(e) => handleChange("workHours", e.target.value)}
-          />
-          <label className="flex items-center space-x-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.remoteOption || false}
-              onChange={(e) => handleChange("remoteOption", e.target.checked)}
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Work Hours</label>
+            <Input
+              placeholder="Work Hours"
+              value={form.workHours || ""}
+              onChange={(e) => handleChange("workHours", e.target.value)}
             />
-            <span>Remote Option</span>
-          </label>
-          <label className="flex items-center space-x-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.overtime || false}
-              onChange={(e) => handleChange("overtime", e.target.checked)}
-            />
-            <span>Overtime</span>
-          </label>
-          <label className="flex items-center space-x-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.flexibleHours || false}
-              onChange={(e) => handleChange("flexibleHours", e.target.checked)}
-            />
-            <span>Flexible Hours</span>
-          </label>
+          </div>
+
+          {[
+            { key: "remoteOption", label: "Remote Option" },
+            { key: "overtime", label: "Overtime" },
+            { key: "flexibleHours", label: "Flexible Hours" },
+          ].map(({ key, label }) => (
+            <div key={key} className="flex items-center space-x-2 text-sm">
+              <input
+                type="checkbox"
+                checked={!!form[key as keyof WorkCondition]}
+                onChange={(e) =>
+                  handleChange(key as keyof WorkCondition, e.target.checked)
+                }
+              />
+              <label>{label}</label>
+            </div>
+          ))}
+
           <Button onClick={handleSubmit} className="w-full mt-2">
             Save
           </Button>
