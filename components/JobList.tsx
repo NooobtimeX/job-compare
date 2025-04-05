@@ -1,14 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
 import { Job } from "@/types/job";
 import { deleteJobById } from "@/utils/jobStorage";
 
@@ -19,122 +12,96 @@ type Props = {
 };
 
 export default function JobList({ jobs, onEdit, onUpdate }: Props) {
-  if (jobs.length === 0) {
-    return <p className="text-gray-500">No jobs added yet.</p>;
-  }
-
   const handleDelete = (id: string) => {
     const updated = deleteJobById(id);
     onUpdate(updated);
   };
 
-  const headers = [
-    "Title",
-    "Base Salary",
-    "Bonus",
-    "Stock Options",
-    "Vacation Days",
-    "Insurance",
-    "Company",
-    "Size",
-    "City",
-    "Relocation",
-    "Work Hours",
-    "Remote",
-    "Overtime",
-    "Flexible Hours",
-  ];
+  if (jobs.length === 0) {
+    return <p className="text-gray-500">No jobs added yet.</p>;
+  }
 
   return (
-    <div className="w-full overflow-x-auto">
-      <div className="bg-white border rounded-xl shadow p-6 min-w-[1200px]">
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          Job Comparison
-        </h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+      {jobs.map((job) => (
+        <Card key={job.id} className="p-4 space-y-2">
+          <div className="flex justify-between items-start">
+            <h3 className="text-lg font-semibold">
+              {job.position?.title || "Untitled Position"}
+            </h3>
+            <div className="flex gap-2">
+              <Button size="sm" onClick={() => onEdit(job)}>
+                Edit
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => handleDelete(job.id)}
+              >
+                🗑
+              </Button>
+            </div>
+          </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {headers.map((label) => (
-                <TableHead key={label}>{label}</TableHead>
-              ))}
-              <TableHead className="text-center">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {jobs.map((job) => (
-              <TableRow key={job.id}>
-                <TableCell className="font-medium">
-                  {job.position?.title || "—"}
-                </TableCell>
-                <TableCell>
-                  {job.position?.baseSalary?.toLocaleString() || "—"}
-                </TableCell>
-                <TableCell>
-                  {job.position?.bonus?.toLocaleString() || "—"}
-                </TableCell>
-                <TableCell>
-                  {job.position?.stockOptions ? "Yes" : "No"}
-                </TableCell>
-                <TableCell>
-                  {job.position?.vacationDays !== undefined
-                    ? `${job.position.vacationDays} days`
-                    : "—"}
-                </TableCell>
-                <TableCell>
-                  {job.position?.insurance?.join(", ") || "—"}
-                </TableCell>
-                <TableCell>{job.company?.name || "—"}</TableCell>
-                <TableCell>{job.company?.size || "—"}</TableCell>
-                <TableCell>{job.company?.city || "—"}</TableCell>
-                <TableCell>
-                  {job.company?.relocationSupport === undefined
-                    ? "—"
-                    : job.company.relocationSupport
-                      ? "Yes"
-                      : "No"}
-                </TableCell>
-                <TableCell>{job.workCondition?.workHours || "—"}</TableCell>
-                <TableCell>
-                  {job.workCondition?.remoteOption === undefined
-                    ? "—"
-                    : job.workCondition.remoteOption
-                      ? "Yes"
-                      : "No"}
-                </TableCell>
-                <TableCell>
-                  {job.workCondition?.overtime === undefined
-                    ? "—"
-                    : job.workCondition.overtime
-                      ? "Yes"
-                      : "No"}
-                </TableCell>
-                <TableCell>
-                  {job.workCondition?.flexibleHours === undefined
-                    ? "—"
-                    : job.workCondition.flexibleHours
-                      ? "Yes"
-                      : "No"}
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => onEdit(job)}>
-                      Edit
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDelete(job.id)}
-                    >
-                      🗑
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+          <div className="grid grid-cols-1 gap-y-1 text-sm text-gray-700">
+            {/* Position */}
+            <div>
+              <strong>Base Salary:</strong>{" "}
+              {job.position?.baseSalary?.toLocaleString() || "—"}
+            </div>
+            <div>
+              <strong>Bonus:</strong>{" "}
+              {job.position?.bonus?.toLocaleString() || "—"}
+            </div>
+
+            {/* Benefits */}
+            <div>
+              <strong>Stock Options:</strong>{" "}
+              {job.benefits?.stockOptions ? "Yes" : "No"}
+            </div>
+            <div>
+              <strong>Vacation Days:</strong>{" "}
+              {job.benefits?.vacationDays ?? "—"}
+            </div>
+            <div>
+              <strong>Insurance:</strong>{" "}
+              {job.benefits?.insurance?.join(", ") || "—"}
+            </div>
+            <div>
+              <strong>Relocation:</strong>{" "}
+              {job.benefits?.relocationSupport ? "Yes" : "No"}
+            </div>
+
+            {/* Company */}
+            <div>
+              <strong>Company:</strong> {job.company?.name || "—"}
+            </div>
+            <div>
+              <strong>Size:</strong> {job.company?.size || "—"}
+            </div>
+            <div>
+              <strong>City:</strong> {job.company?.city || "—"}
+            </div>
+
+            {/* Work Condition */}
+            <div>
+              <strong>Work Hours:</strong> {job.workCondition?.workHours || "—"}
+            </div>
+            <div>
+              <strong>Remote:</strong>{" "}
+              {job.workCondition?.remoteOption ? "Yes" : "No"}
+            </div>
+            <div>
+              <strong>Overtime:</strong>{" "}
+              {job.workCondition?.overtime ? "Yes" : "No"}
+            </div>
+            <div>
+              <strong>Flexible Hours:</strong>{" "}
+              {job.workCondition?.flexibleHours ? "Yes" : "No"}
+            </div>
+          </div>
+        </Card>
+      ))}
     </div>
   );
 }
